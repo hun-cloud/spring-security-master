@@ -1,4 +1,4 @@
-package io.security.springsecuritymaster.security.configs;
+package io.security.springsecuritymaster.security.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
