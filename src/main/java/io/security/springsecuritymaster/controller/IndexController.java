@@ -1,5 +1,9 @@
 package io.security.springsecuritymaster.controller;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.CurrentSecurityContext;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,16 +17,33 @@ public class IndexController {
     }
 
     @GetMapping("/loginPage")
-    @ResponseBody
     public String loginPage() {
         return "loginPage";
     }
 
     @GetMapping("/home")
-    @ResponseBody
     public String homePage() {
         return "home";
     }
 
+    @GetMapping("/anonymous")
+    public String anonymous() {
+        return "anonymous";
+    }
+
+    @GetMapping("/authentication")
+    public String authentication(Authentication authentication) {
+        // 익명 객체를 참조할 방법이 없음
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return "anonymous";
+        } else {
+            return "not anonymous";
+        }
+    }
+
+    @GetMapping("/anonymousContext")
+    public String anonymousContext(@CurrentSecurityContext SecurityContext context) {
+        return context.getAuthentication().getName();
+    }
 
 }
