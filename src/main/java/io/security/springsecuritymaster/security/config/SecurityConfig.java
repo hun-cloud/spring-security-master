@@ -28,14 +28,9 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/logoutSuccess").permitAll()
+                         .requestMatchers("/logoutSuccess").permitAll()
                         .anyRequest().authenticated())
-                .formLogin(form -> form
-                        .successHandler((request, response, authentication) -> {
-                            SavedRequest savedRequest = requestCache.getRequest(request, response);
-                            String redirectUrl = savedRequest.getRedirectUrl();
-                            response.sendRedirect(redirectUrl);
-                        }))
+                .formLogin(Customizer.withDefaults())
         ;
 
         return http.build();
