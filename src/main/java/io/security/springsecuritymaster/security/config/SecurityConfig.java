@@ -30,17 +30,28 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                         .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .anyRequest().authenticated())
-//                .formLogin(Customizer.withDefaults())
+                .formLogin(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session
+                        // 이미 만료된 세션으로 요청하는 사용자를 특정 엔드포인트로 리다이레션할 URL을 지정
+                        .invalidSessionUrl("/invalidSessionUrl")
+                        // 사용자당 최대 세션 수를 제어한다. 기본값은 무제한 세션을 허용한다.
+                        .maximumSessions(1)
+                        // true이면 최대 세션수에 도달했을 때 사용자의 인증을 방지한다.
+                        // false(기본설정) 인증하는 사용자에게 접근을 허용하고 기존 사용자 세션은 만료된다.
+                        .maxSessionsPreventsLogin(true)
+                        // 세션을 만료하고 나서 리다이렉션할 URL을 지정한다.
+                        .expiredUrl("/expired")
+                )
         ;
 
         return http.build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
