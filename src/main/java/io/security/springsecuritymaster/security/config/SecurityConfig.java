@@ -30,6 +30,10 @@ public class SecurityConfig {
                          .requestMatchers("/logoutSuccess").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(Customizer.withDefaults())
+                .securityContext(securityContext ->
+                        securityContext.requireExplicitSave(true) // securityContext를 명시적으로 저장할 것인지 아닌지의 여부 설정
+                        // true 이면 SecurityContextHolderFilter, false이면 SecurityContextPersistanceFilter 실행
+                )
         ;
 
         return http.build();
